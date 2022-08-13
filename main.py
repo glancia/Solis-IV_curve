@@ -26,13 +26,13 @@ def set_instrument(address, debug=False):
     return instrument
 
 
-def get_results(debug=False):
+def get_results(init_address, inverters, strings, debug=False):
     f = open('/tmp/iv_curves.csv', 'w')
     f.write('inverter;string;I;V\n')
-    for inv in range(INVERTERS):
-        instrument = set_instrument(inv + INIT_ADDRESS, debug=debug)
+    for inv in range(inverters):
+        instrument = set_instrument(inv + init_address, debug=debug)
 
-        for string in range(STRINGS):
+        for string in range(strings):
             instrument.write_register(3342-OFFSET, string, functioncode=6)
             sleep(DELAY)
             results = instrument.read_registers(registeraddress=3343-OFFSET, number_of_registers=120, functioncode=4)
@@ -46,9 +46,9 @@ def get_results(debug=False):
     f.close()
 
 
-def trigger_curves():
-    for inv in range(0, INVERTERS - 1):
-        instrument = set_instrument(inv + INIT_ADDRESS)
+def trigger_curves(init_address, inverters, strings):
+    for inv in range(0, inverters):
+        instrument = set_instrument(inv + init_address)
         instrument.write_register(3241-OFFSET, 850, 0)  # start voltage
         sleep(DELAY)
         instrument.write_register(3242-OFFSET, 10, 0)  # start voltage
@@ -71,6 +71,18 @@ def cmd_line():
                      help="points to localhost TCP",
                      default=False,
                      type=bool)
+    cmd.add_argument("--init_address",
+                     help="First node",
+                     default=1,
+                     type=int)
+    cmd.add_argument("--inverters",
+                     help="number of inverters",
+                     default=1,
+                     type=int)
+    cmd.add_argument("--strings",
+                     help="number of strings per inverter",
+                     default=1,
+                     type=int)
 
     return cmd.parse_args()
 
@@ -84,9 +96,9 @@ def main():
         listOfGlobals['DELAY'] = 0
 
     if args.action == 'trigger':
-        trigger_curves()
+        trigger_curves(args.init_address, args.inverters, args.strings)
     elif args.action == 'get':
-        get_results(args.debug)
+        get_results(args.init_address, args.inverters, args.strings, args.debug)
     elif args.action == 'test':
         test(args.debug)
     else:
