@@ -58,7 +58,7 @@ def trigger_curves():
 
 def test(debug=False):
     instrument = set_instrument(INIT_ADDRESS, debug=debug)
-    print(instrument.read_registers(3073-OFFSET, 6))  # ano, mes, dia, hora, min, seg
+    print(instrument.read_registers(3073-OFFSET, number_of_registers=6, functioncode=4))  # ano, mes, dia, hora, min, seg
 
 
 def cmd_line():
