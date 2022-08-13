@@ -42,7 +42,7 @@ def get_results(init_address, inverters, strings, debug=False):
             for i in range(0, 60):
                 V = results[i] / 10
                 I = results[i + 1] / 10
-                f.write('{};{};{};{}\n'.format(inv + 1, string + 1, I, V))
+                f.write('{};{};{};{}\n'.format(init_address + inv, string + 1, I, V))
     f.close()
 
 
