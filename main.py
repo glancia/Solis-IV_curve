@@ -40,8 +40,8 @@ def get_results(init_address, inverters, strings, debug=False):
             print("Inversor {} - string {}:".format(inv+1, string+1))
             print(results)
             for i in range(0, 60):
-                V = results[i] / 10
-                I = results[i + 1] / 10
+                V = results[2*i] / 10
+                I = results[2*i + 1] / 10
                 f.write('{};{};{};{}\n'.format(init_address + inv, string + 1, I, V))
     f.close()
 
