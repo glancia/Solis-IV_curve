@@ -56,9 +56,13 @@ def trigger_curves(init_address, inverters, strings):
         instrument.write_register(3240-OFFSET, 1, 0)  # start
 
 
-def test(debug=False):
-    instrument = set_instrument(INIT_ADDRESS, debug=debug)
-    print(instrument.read_registers(3073-OFFSET, number_of_registers=6, functioncode=4))  # ano, mes, dia, hora, min, seg
+def test(init_address, inverters, debug=False):
+    for inv in range(inverters):
+        instrument = set_instrument(init_address+inv, debug=debug)
+    try:
+        print(instrument.read_registers(3073-OFFSET, number_of_registers=6, functioncode=4))  # ano, mes, dia, hora, min, seg
+    except Exception as e:
+        print("Inverter {} - No response".format(init_address+inv))
 
 
 def cmd_line():
@@ -100,7 +104,7 @@ def main():
     elif args.action == 'get':
         get_results(args.init_address, args.inverters, args.strings, args.debug)
     elif args.action == 'test':
-        test(args.debug)
+        test(args.init_address, args.inverters, args.debug)
     else:
         print("No action")
 
