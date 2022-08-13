@@ -49,11 +49,7 @@ def get_results(init_address, inverters, strings, debug=False):
 def trigger_curves(init_address, inverters, strings):
     for inv in range(0, inverters):
         instrument = set_instrument(inv + init_address)
-        instrument.write_register(3241-OFFSET, 850, 0)  # start voltage
-        sleep(DELAY)
-        instrument.write_register(3242-OFFSET, 10, 0)  # start voltage
-        sleep(DELAY)
-        instrument.write_register(3240-OFFSET, 1, 0)  # start
+        instrument.write_registers(3240-OFFSET, [1, 850, 10])  # start, start voltage, interval
 
 
 def test(init_address, inverters, debug=False):
@@ -61,7 +57,7 @@ def test(init_address, inverters, debug=False):
         instrument = set_instrument(init_address+inv, debug=debug)
         try:
             print("Inverter {} - relogio {}".format(init_address+inv, instrument.read_registers(3073-OFFSET, number_of_registers=6, functioncode=4)))  # ano, mes, dia, hora, min, seg
-            print("Inverter {} - param curvas {}".format(init_address + inv, instrument.read_registers(3241 - OFFSET, number_of_registers=2, functioncode=4)))  # ano, mes, dia, hora, min, seg
+            print("Inverter {} - param curvas {}".format(init_address + inv, instrument.read_registers(3241 - OFFSET, number_of_registers=3, functioncode=4)))  # ano, mes, dia, hora, min, seg
         except Exception as e:
             print("Inverter {} - No response".format(init_address+inv))
 
