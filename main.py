@@ -58,6 +58,7 @@ def test(init_address, inverters, debug=False):
         try:
             print("Inverter {} - relogio {}".format(init_address+inv, instrument.read_registers(3073-OFFSET, number_of_registers=6, functioncode=4)))  # ano, mes, dia, hora, min, seg
             print("Inverter {} - param curvas {}".format(init_address + inv, instrument.read_registers(3240 - OFFSET, number_of_registers=3, functioncode=4)))  # ano, mes, dia, hora, min, seg
+            print("Inverter {} - string atual {}".format(init_address + inv, instrument.read_registers(3341 - OFFSET, number_of_registers=2, functioncode=4)))  # ano, mes, dia, hora, min, seg
         except Exception as e:
             print("Inverter {} - No response".format(init_address+inv))
 
