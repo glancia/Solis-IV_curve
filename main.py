@@ -33,7 +33,7 @@ def get_results(init_address, inverters, strings, debug=False):
         instrument = set_instrument(inv + init_address, debug=debug)
 
         for string in range(strings):
-            instrument.write_register(3341-OFFSET, string, functioncode=6)
+            instrument.write_register(3342-OFFSET, string, functioncode=6)
             sleep(DELAY)
             results = instrument.read_registers(registeraddress=3343-OFFSET, number_of_registers=120, functioncode=4)
             sleep(DELAY)
